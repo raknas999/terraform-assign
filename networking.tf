@@ -1,5 +1,6 @@
 # networking.tf | Network Configuration
 
+# Create and attah the Internet Gateway to VPC 
 resource "aws_internet_gateway" "aws-igw" {
   vpc_id = aws_vpc.aws-vpc.id
   tags = {
@@ -9,6 +10,7 @@ resource "aws_internet_gateway" "aws-igw" {
 
 }
 
+#Create public subnets, each in a different AZ
 resource "aws_subnet" "public" {
   vpc_id                  = aws_vpc.aws-vpc.id
   cidr_block              = element(var.public_subnets, count.index)
@@ -22,6 +24,7 @@ resource "aws_subnet" "public" {
   }
 }
 
+# Create public Route Table
 resource "aws_route_table" "public" {
   vpc_id = aws_vpc.aws-vpc.id
 
@@ -31,12 +34,14 @@ resource "aws_route_table" "public" {
   }
 }
 
+# Route the public subnet traffic through the IGW
 resource "aws_route" "public" {
   route_table_id         = aws_route_table.public.id
   destination_cidr_block = "0.0.0.0/0"
   gateway_id             = aws_internet_gateway.aws-igw.id
 }
 
+#Associate public subnets to public route table
 resource "aws_route_table_association" "public" {
   count          = length(var.public_subnets)
   subnet_id      = element(aws_subnet.public.*.id, count.index)
