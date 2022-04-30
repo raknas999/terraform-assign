@@ -1,5 +1,6 @@
 # ecs.tf | Elastic Container Service Cluster and Tasks Configuration
 
+#Creation of ECS cluster
 resource "aws_ecs_cluster" "aws-ecs-cluster" {
   name = "${var.app_name}-${var.app_environment}-cluster"
   tags = {
@@ -8,6 +9,7 @@ resource "aws_ecs_cluster" "aws-ecs-cluster" {
   }
 }
 
+#Cloudwatch group to capture the logs
 resource "aws_cloudwatch_log_group" "log-group" {
   name = "${var.app_name}-${var.app_environment}-logs"
 
@@ -31,6 +33,7 @@ data "template_file" "env_vars" {
   }
 }
 
+#Task definition to run application
 resource "aws_ecs_task_definition" "aws-ecs-task" {
   family = "${var.app_name}-task"
   requires_compatibilities = ["FARGATE"]
@@ -51,6 +54,7 @@ data "aws_ecs_task_definition" "main" {
   task_definition = aws_ecs_task_definition.aws-ecs-task.family
 }
 
+#ECS service to run the tasks
 resource "aws_ecs_service" "aws-ecs-service" {
   name                 = "flask"
   cluster              = aws_ecs_cluster.aws-ecs-cluster.id
