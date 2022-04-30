@@ -1,0 +1,15 @@
+[
+  {
+    "name": "${app_name}-${app_environment}-container",
+    "image": "${ecr_url}/${app_name}-${app_environment}-ecr:${tag}",
+    "cpu": ${fargate_cpu},
+    "memory": ${fargate_memory},
+    "essential": true,
+    "portMappings": [
+        {
+         "containerPort": ${app_port},
+         "hostPort": ${app_port}
+         }
+  ]
+  }
+]
