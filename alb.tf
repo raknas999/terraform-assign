@@ -36,6 +36,7 @@ resource "aws_lb_target_group" "target_group" {
   }
 }
 
+#redirecting all incomming traffic from ALB to the target group
 resource "aws_lb_listener" "listener" {
   load_balancer_arn = aws_alb.application_load_balancer.id
   port              = "${var.app_port}"
