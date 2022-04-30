@@ -8,6 +8,7 @@ resource "aws_appautoscaling_target" "ecs_target" {
   service_namespace  = "ecs"
 }
 
+#Autoscaling policy for Memory
 resource "aws_appautoscaling_policy" "ecs_policy_memory" {
   name               = "${var.app_name}-${var.app_environment}-memory-autoscaling"
   policy_type        = "TargetTrackingScaling"
@@ -24,6 +25,7 @@ resource "aws_appautoscaling_policy" "ecs_policy_memory" {
   }
 }
 
+#Autoscaling policy for CPU
 resource "aws_appautoscaling_policy" "ecs_policy_cpu" {
   name               = "${var.app_name}-${var.app_environment}-cpu-autoscaling"
   policy_type        = "TargetTrackingScaling"
